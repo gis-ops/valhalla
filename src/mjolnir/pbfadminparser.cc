@@ -125,6 +125,8 @@ public:
     osm_admin_data_.max_changeset_id_ = std::max(osm_admin_data_.max_changeset_id_, changeset_id);
   }
 
+  virtual void id_assignment_callback(uint64_t osmid, bool node, bool waynode) {}
+
   // Lua Tag Transformation class
   LuaTagTransform lua_;
 

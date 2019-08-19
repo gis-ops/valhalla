@@ -26,6 +26,7 @@ option(ENABLE_NODE_BINDINGS "Build NodeJs bindings" ON)
 option(ENABLE_CCACHE "Speed up incremental rebuilds via ccache" ON)
 option(ENABLE_COVERAGE "Build with coverage instrumentalisation" OFF)
 option(ENABLE_SANITIZER "Use memory sanitizer for Debug build" OFF)
+option(ENABLE_LARGE_ID_SUPPORT "Build with OSM ID support up to 128 bits" OFF)
 set(LOGGING_LEVEL "" CACHE STRING "Logging level, default is INFO")
 set_property(CACHE LOGGING_LEVEL PROPERTY STRINGS "NONE;ALL;ERROR;WARN;INFO;DEBUG;TRACE")
 
@@ -193,6 +194,12 @@ elseif(ENABLE_TOOLS)
 elseif(NOT Boost_FOUND)
   find_package(Boost 1.51 REQUIRED)
 endif()
+
+# Add large ID support
+if (ENABLE_LARGE_ID_SUPPORT)
+  add_definitions(-DLARGE_ID_SUPPORT)
+  message(STATUS  "Set LARGE_ID_SUPPORT TO TRUE")
+endif ()
 
 ## libvalhalla
 add_subdirectory(src)

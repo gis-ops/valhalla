@@ -42,6 +42,13 @@ struct OSMLaneConnectivity {
   uint32_t from_lanes_index; // Index to string in UniqueNames
 };
 
+// Object to hold the osm id data for reassignment
+struct OSMLargeIdObject {
+    uint64_t id_;
+    uint32_t  new_id_;
+    uint32_t original_index_;
+};
+
 // Data types used within OSMData. Note that any maps using OSM way Id as a key can be
 // 32 bit (OSM nodes require 64 bits, but ways do not)
 using RestrictionsMultiMap = std::unordered_multimap<uint32_t, OSMRestriction>;

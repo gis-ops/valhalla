@@ -49,7 +49,8 @@ enum Interest {
   WAYS = 0x02,
   RELATIONS = 0x04,
   CHANGESETS = 0x8,
-  ALL = 0x15
+  ALL = 0x15,
+  REASSIGNMENT = 0x20
 };
 
 // Represents the key/values of an object
@@ -75,6 +76,7 @@ struct Callback {
   virtual void
   relation_callback(const uint64_t osmid, const Tags& tags, const std::vector<Member>& members) = 0;
   virtual void changeset_callback(const uint64_t changeset_id) = 0;
+  virtual void id_assignment_callback(uint64_t osmid, bool node = false, bool waynode = false) = 0;
 };
 
 // the parser used to get data out of the osmpbf file

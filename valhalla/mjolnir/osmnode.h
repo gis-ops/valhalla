@@ -10,15 +10,27 @@
 namespace valhalla {
 namespace mjolnir {
 
-constexpr uint64_t kMaxOSMNodeId = 68719476735;
-constexpr uint32_t kMaxNodeNameIndex = 2097151;
+#ifdef LARGE_ID_SUPPORT
+    constexpr uint64_t kMaxOSMNodeId = UINT64_MAX;
+    constexpr bool largeIDSupport = true;
+#else
+    constexpr uint64_t kMaxOSMNodeId = 68719476735;
+    constexpr bool largeIDSupport = false;
+#endif
+    constexpr uint32_t kMaxNodeNameIndex = 2097151;
 
 /**
  * OSM node information. Result of parsing an OSM node.
  */
 struct OSMNode {
   // The osm id of the node
+#ifdef LARGE_ID_SUPPORT
+  bool largeID = true;
+  uint64_t osmid_;
+#else
+  bool largeID = false;
   uint64_t osmid_ : 36; // Allows up to 64B Ids
+#endif
   uint64_t access_ : 12;
   uint64_t type_ : 4;
   uint64_t intersection_ : 1;

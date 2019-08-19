@@ -29,6 +29,8 @@ namespace {
 
 // Temporary files used during tile building
 const std::string ways_file = "ways.bin";
+const std::string original_nodeids_file = "original_node_ids.bin";
+const std::string original_way_nodeids_file = "original_way_nodeids.bin";
 const std::string way_nodes_file = "way_nodes.bin";
 const std::string nodes_file = "nodes.bin";
 const std::string edges_file = "edges.bin";
@@ -178,6 +180,8 @@ bool build_tile_set(const boost::property_tree::ptree& config,
   std::string ways_bin = tile_dir + ways_file;
   std::string way_nodes_bin = tile_dir + way_nodes_file;
   std::string nodes_bin = tile_dir + nodes_file;
+  std::string original_nodeids_bin = tile_dir + original_nodeids_file;
+  std::string original_way_nodeids_bin = tile_dir + original_way_nodeids_file;
   std::string edges_bin = tile_dir + edges_file;
   std::string access_bin = tile_dir + access_file;
   std::string cr_from_bin = tile_dir + cr_from_file;
@@ -193,7 +197,8 @@ bool build_tile_set(const boost::property_tree::ptree& config,
     // Read the OSM protocol buffer file. Callbacks for nodes, ways, and
     // relations are defined within the PBFParser class
     osm_data = PBFGraphParser::Parse(config.get_child("mjolnir"), input_files, ways_bin,
-                                     way_nodes_bin, access_bin, cr_from_bin, cr_to_bin);
+                                     way_nodes_bin, access_bin, cr_from_bin, cr_to_bin,
+                                     original_nodeids_bin, original_way_nodeids_bin);
 
     // Free all protobuf memory - cannot use the protobuffer lib after this!
     OSMPBF::Parser::free();
@@ -212,8 +217,8 @@ bool build_tile_set(const boost::property_tree::ptree& config,
     }
 
     // Build the graph using the OSMNodes and OSMWays from the parser
-    GraphBuilder::Build(config, osm_data, ways_bin, way_nodes_bin, nodes_bin, edges_bin, cr_from_bin,
-                        cr_to_bin);
+    GraphBuilder::Build(config, osm_data, ways_bin, way_nodes_bin, nodes_bin, edges_bin,
+            cr_from_bin, cr_to_bin);
   }
 
   // Enhance the local level of the graph. This adds information to the local
@@ -285,6 +290,8 @@ bool build_tile_set(const boost::property_tree::ptree& config,
     remove_temp_file(cr_to_bin);
     remove_temp_file(new_to_old_bin);
     remove_temp_file(old_to_new_bin);
+    remove_temp_file(original_nodeids_bin);
+    remove_temp_file(original_way_nodeids_bin);
     OSMData::cleanup_temp_files(tile_dir);
   }
   return true;

@@ -9,7 +9,7 @@ namespace baldr {
 
 // OSM Ids can exceed 32 bits, but these are currently only Node Ids. Way Ids should still have
 // room to grow before exceeding an unsigned 32 bit word.
-constexpr uint32_t kMaxOSMWayId = 4294967295;
+constexpr uint64_t kMaxOSMWayId = UINT64_MAX;
 
 // Maximum tile id/index supported. 22 bits
 constexpr uint32_t kMaxGraphTileId = 4194303;

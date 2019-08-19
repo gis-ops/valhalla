@@ -337,6 +337,8 @@ void trivial_path_no_uturns(const std::string& config_file) {
   std::string ways_file = "test_ways_trivial.bin";
   std::string way_nodes_file = "test_way_nodes_trivial.bin";
   std::string nodes_file = "test_nodes_trivial.bin";
+  std::string original_nodeids_file = "test_original_node_ids_trivial.bin";
+  std::string original_waynode_ids_file = "test_original_waynode_ids_trivial.bin";
   std::string edges_file = "test_edges_trivial.bin";
   std::string access_file = "test_access_trivial.bin";
   std::string cr_from_file = "test_from_complex_restrictions_trivial.bin";
@@ -346,7 +348,8 @@ void trivial_path_no_uturns(const std::string& config_file) {
   auto osmdata =
       vj::PBFGraphParser::Parse(conf.get_child("mjolnir"),
                                 {VALHALLA_SOURCE_DIR "test/data/utrecht_netherlands.osm.pbf"},
-                                ways_file, way_nodes_file, access_file, cr_from_file, cr_to_file);
+                                ways_file, way_nodes_file, access_file, cr_from_file, cr_to_file,
+                                original_nodeids_file, original_waynode_ids_file);
 
   // Build the graph using the OSMNodes and OSMWays from the parser
   vj::GraphBuilder::Build(conf, osmdata, ways_file, way_nodes_file, nodes_file, edges_file,

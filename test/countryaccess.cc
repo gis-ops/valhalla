@@ -91,6 +91,8 @@ void CountryAccess(const std::string& config_file) {
   std::string ways_file = "test_ways_amsterdam.bin";
   std::string way_nodes_file = "test_way_nodes_amsterdam.bin";
   std::string nodes_file = "test_nodes_amsterdam.bin";
+  std::string original_nodeids_file = "test_original_node_ids_amsterdam.bin";
+  std::string original_waynode_ids_file = "test_original_waynode_ids_amsterdam.bin";
   std::string edges_file = "test_edges_amsterdam.bin";
   std::string access_file = "test_access_amsterdam.bin";
   std::string cr_from_file = "test_from_cr_amsterdam.bin";
@@ -99,7 +101,8 @@ void CountryAccess(const std::string& config_file) {
   // Parse Amsterdam OSM data
   auto osmdata = PBFGraphParser::Parse(conf.get_child("mjolnir"),
                                        {VALHALLA_SOURCE_DIR "test/data/amsterdam.osm.pbf"}, ways_file,
-                                       way_nodes_file, access_file, cr_from_file, cr_to_file);
+                                       way_nodes_file, access_file, cr_from_file, cr_to_file,
+                                       original_nodeids_file, original_waynode_ids_file);
 
   // Build the graph using the OSMNodes and OSMWays from the parser
   GraphBuilder::Build(conf, osmdata, ways_file, way_nodes_file, nodes_file, edges_file, cr_from_file,

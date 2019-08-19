@@ -25,6 +25,8 @@ namespace {
 const std::string config_file = "test/test_config_ut";
 std::string ways_file = "test_ways_utrecht.bin";
 std::string way_nodes_file = "test_way_nodes_utrecht.bin";
+std::string original_nodeids_file = "test_original_node_ids_utrecht.bin";
+std::string original_waynode_ids_file = "test_original_waynode_ids_utrecht.bin";
 std::string access_file = "test_access_utrecht.bin";
 std::string from_restriction_file = "test_from_complex_restrictions_utrecht.bin";
 std::string to_restriction_file = "test_to_complex_restrictions_utrecht.bin";
@@ -55,7 +57,8 @@ void Parse() {
   auto osmdata =
       PBFGraphParser::Parse(conf.get_child("mjolnir"),
                             {VALHALLA_SOURCE_DIR "test/data/utrecht_netherlands.osm.pbf"}, ways_file,
-                            way_nodes_file, access_file, from_restriction_file, to_restriction_file);
+                            way_nodes_file, access_file, from_restriction_file, to_restriction_file,
+                            original_nodeids_file, original_waynode_ids_file);
 }
 
 void TestBike() {

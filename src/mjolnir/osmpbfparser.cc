@@ -163,6 +163,34 @@ void parse_primitive_block(char* unpack_buffer,
 
   // for each primitive group
   for (const auto& primitive_group : primblock.primitivegroup()) {
+      // collect nodes and way nodes
+      if ((interest & REASSIGNMENT) == REASSIGNMENT) {
+          // collect way nodes in order
+          for (const auto& way : primitive_group.ways()) {
+              uint64_t node = 0;
+              for (auto node_id_offset : way.refs()) {
+                  node += node_id_offset;
+                  callback.id_assignment_callback(node, false, true);
+
+              }
+          }
+          // collect nodes
+          for (const auto& node : primitive_group.nodes()) {
+              callback.id_assignment_callback(node.id(), true, false);
+          }
+
+          // Collect dense Nodes
+          if (primitive_group.has_dense()) {
+              const DenseNodes& dense_nodes = primitive_group.dense();
+              uint64_t id = 0;
+              for (int i = 0; i<dense_nodes.id_size(); ++i) {
+                  id += dense_nodes.id(i);
+                  callback.id_assignment_callback(id, true, false);
+              }
+          }
+      }
+
+
 
     // do the nodes
     if ((interest & NODES) == NODES) {

@@ -25,7 +25,7 @@ struct OSMAccess {
    * Constructor with way id arg.
    * @param   id  way id
    */
-  OSMAccess(const uint32_t id) {
+  OSMAccess(const uint64_t id) {
     set_way_id(id);
     attributes_ = {0};
   }
@@ -34,7 +34,7 @@ struct OSMAccess {
    * Set way id.
    * @param   id  way id
    */
-  void set_way_id(const uint32_t id) {
+  void set_way_id(const uint64_t id) {
     osmwayid_ = id;
   }
 
@@ -42,7 +42,7 @@ struct OSMAccess {
    * Get the way id
    * @return  Returns way id.
    */
-  uint32_t way_id() const {
+  uint64_t way_id() const {
     return osmwayid_;
   }
 
@@ -207,7 +207,7 @@ struct OSMAccess {
   }
 
   // OSM way Id
-  uint32_t osmwayid_;
+  uint64_t osmwayid_;
 
   // Access attributes
   union AccessAttributes {
