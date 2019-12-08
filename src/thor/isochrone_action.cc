@@ -41,7 +41,7 @@ std::string thor_worker_t::isochrones(Api& request) {
   auto isolines =
       grid->GenerateContours(contours, options.polygons(), options.denoise(), options.generalize());
 
-  return tyr::serializeIsochrones<PointLL>(request, isolines, options.polygons(), colors,
+  return tyr::serializeIsochrones<PointLL>(request, isolines, grid->snapped_node(), options.polygons(), colors,
                                            options.show_locations());
 }
 

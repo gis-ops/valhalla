@@ -314,6 +314,7 @@ Isochrone::Compute(google::protobuf::RepeatedPtrField<valhalla::Location>& origi
 
   // Set the origin locations
   SetOriginLocations(graphreader, origin_locations, costing_);
+  isotile_->set_snapped_node(snapped_node_);
 
   // Check if date_time is set on the origin location. Set the seconds_of_week if it is set
   has_date_time_ = false;
@@ -1048,7 +1049,7 @@ void Isochrone::SetOriginLocations(
 
     // Iterate through edges and add to adjacency list
     const NodeInfo* nodeinfo = nullptr;
-    for (const auto& edge : (origin.path_edges())) {
+    for (const auto&edge : (origin.path_edges())) {
       // If origin is at a node - skip any inbound edge (dist = 1)
       if (has_other_edges && edge.end_node()) {
         continue;
@@ -1064,16 +1065,22 @@ void Isochrone::SetOriginLocations(
       const GraphTile* tile = graphreader.GetGraphTile(edgeid);
       const DirectedEdge* directededge = tile->directededge(edgeid);
 
+      GraphId endnode = directededge->endnode();
+
       // Get the tile at the end node. Skip if tile not found as we won't be
       // able to expand from this origin edge.
-      const GraphTile* endtile = graphreader.GetGraphTile(directededge->endnode());
+      const GraphTile* endtile = graphreader.GetGraphTile(endnode);
       if (endtile == nullptr) {
         continue;
       }
 
       // Get cost
-      nodeinfo = endtile->node(directededge->endnode());
+      nodeinfo = endtile->node(endnode);
       Cost cost = costing->EdgeCost(directededge, tile) * (1.0f - edge.percent_along());
+
+      // Set snapped node
+      snapped_node_ = edge.ll();
+//      snapped_node_ = nodeinfo->latlng(endtile->BoundingBox().minpt());
 
       // We need to penalize this location based on its score (distance in meters from input)
       // We assume the slowest speed you could travel to cover that distance to start/end the route

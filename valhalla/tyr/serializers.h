@@ -45,6 +45,7 @@ template <class coord_t>
 std::string
 serializeIsochrones(const Api& request,
                     const typename midgard::GriddedData<coord_t>::contours_t& grid_contours,
+                    valhalla::LatLng snapped_center,
                     bool polygons = true,
                     const std::unordered_map<float, std::string>& colors = {},
                     bool show_locations = false);
