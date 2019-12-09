@@ -106,18 +106,18 @@ public:
                               const float denoise = 1.f,
                               const float generalize = 200.f) const;
 
-    /**
-     * Sets the center node of the isochrone after it snapped to the graph.
-     *
-     * @param snap_node The node which should be set.
-     */
-    inline void set_snapped_node(valhalla::LatLng& snap_node) {
-        snapped_node_ = snap_node;
-    };
+  /**
+   * Sets the center node of the isochrone after it snapped to the graph.
+   *
+   * @param snap_node The node which should be set.
+   */
+  inline void set_snapped_node(valhalla::LatLng& snap_node) {
+    snapped_node_ = snap_node;
+  };
 
-    inline valhalla::LatLng snapped_node() const {
-        return snapped_node_;
-    };
+  inline valhalla::LatLng snapped_node() const {
+    return snapped_node_;
+  };
 
 protected:
   float max_value_;         // Maximum value stored in the tile

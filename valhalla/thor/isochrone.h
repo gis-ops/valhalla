@@ -92,10 +92,10 @@ public:
 
 protected:
   bool has_date_time_;
-  int start_tz_index_;   // Timezone at the start of the isochrone
-  float shape_interval_; // Interval along shape to mark time
-  sif::TravelMode mode_; // Current travel mode
-  uint32_t access_mode_; // Access mode used by the costing method
+  int start_tz_index_;            // Timezone at the start of the isochrone
+  float shape_interval_;          // Interval along shape to mark time
+  sif::TravelMode mode_;          // Current travel mode
+  uint32_t access_mode_;          // Access mode used by the costing method
   valhalla::LatLng snapped_node_; // The graph node the center snapped to
 
   // For multimodal isochrones

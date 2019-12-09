@@ -1049,7 +1049,7 @@ void Isochrone::SetOriginLocations(
 
     // Iterate through edges and add to adjacency list
     const NodeInfo* nodeinfo = nullptr;
-    for (const auto&edge : (origin.path_edges())) {
+    for (const auto& edge : (origin.path_edges())) {
       // If origin is at a node - skip any inbound edge (dist = 1)
       if (has_other_edges && edge.end_node()) {
         continue;
@@ -1080,7 +1080,7 @@ void Isochrone::SetOriginLocations(
 
       // Set snapped node
       snapped_node_ = edge.ll();
-//      snapped_node_ = nodeinfo->latlng(endtile->BoundingBox().minpt());
+      //      snapped_node_ = nodeinfo->latlng(endtile->BoundingBox().minpt());
 
       // We need to penalize this location based on its score (distance in meters from input)
       // We assume the slowest speed you could travel to cover that distance to start/end the route
