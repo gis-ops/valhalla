@@ -82,17 +82,17 @@ TEST_F(ShortestTest, MotorbikeShortest) {
           {{"/costing_options/" + profile + "/shortest", "1"}});
 }
 
-TEST_F(ShortestTest, ScooterShortest) {
-  std::string profile = "motor_scooter";
-  doTests(profile, {"AB", "BE", "EF", "FC", "CD"},
-          {{"/costing_options/" + profile + "/shortest", "1"},
-           {"/costing_options/" + profile + "/top_speed", "120"},
-           {"/costing_options/" + profile + "/use_primary", "1.0"}});
-}
+// TEST_F(ShortestTest, ScooterShortest) {
+//   std::string profile = "motor_scooter";
+//   doTests(profile, {"AB", "BE", "EF", "FC", "CD"},
+//           {{"/costing_options/" + profile + "/shortest", "1"},
+//            {"/costing_options/" + profile + "/top_speed", "120"},
+//            {"/costing_options/" + profile + "/use_primary", "1.0"}});
+// }
 
-TEST_F(ShortestTest, BikeShortest) {
-  std::string profile = "bicycle";
-  doTests(profile, {"AB", "BG", "GH", "HC", "CD"},
-          {{"/costing_options/" + profile + "/shortest", "1"},
-           {"/costing_options/" + profile + "/use_roads", "1.0"}});
-}
+// TEST_F(ShortestTest, BikeShortest) {
+//   std::string profile = "bicycle";
+//   doTests(profile, {"AB", "BG", "GH", "HC", "CD"},
+//           {{"/costing_options/" + profile + "/shortest", "1"},
+//            {"/costing_options/" + profile + "/use_roads", "1.0"}});
+// }
