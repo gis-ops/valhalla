@@ -12,7 +12,7 @@ using namespace valhalla::sif;
 namespace {
 
 // Method to get an operator Id from a map of operator strings vs. Id.
-uint32_t GetOperatorId(const GraphTile* tile,
+uint32_t GetOperatorId(const graph_tile_ptr& tile,
                        uint32_t routeid,
                        std::unordered_map<std::string, uint32_t>& operators) {
   const TransitRoute* transit_route = tile->GetTransitRoute(routeid);
@@ -99,7 +99,7 @@ void Dijkstras::ExpandForward(GraphReader& graphreader,
                               const TimeInfo& time_info) {
   // Get the tile and the node info. Skip if tile is null (can happen
   // with regional data sets) or if no access at the node.
-  const GraphTile* tile = graphreader.GetGraphTile(node);
+  graph_tile_ptr tile = graphreader.GetGraphTile(node);
   if (tile == nullptr) {
     return;
   }
@@ -167,17 +167,17 @@ void Dijkstras::ExpandForward(GraphReader& graphreader,
     // less cost the predecessor is updated and the sort cost is decremented
     // by the difference in real cost (A* heuristic doesn't change)
     if (es->set() == EdgeSet::kTemporary) {
-      EdgeLabel& lab = bdedgelabels_[es->index()];
+      BDEdgeLabel& lab = bdedgelabels_[es->index()];
       if (newcost.cost < lab.cost().cost) {
         float newsortcost = lab.sortcost() - (lab.cost().cost - newcost.cost);
         adjacencylist_->decrease(es->index(), newsortcost);
-        lab.Update(pred_idx, newcost, newsortcost, path_dist, transition_cost, restriction_idx);
+        lab.Update(pred_idx, newcost, newsortcost, transition_cost, path_dist, restriction_idx);
       }
       continue;
     }
 
     // Only needed if you want to connect with a reverse path
-    const GraphTile* t2 = tile;
+    graph_tile_ptr t2 = tile;
     GraphId oppedgeid = graphreader.GetOpposingEdgeId(edgeid, t2);
 
     // Add edge label, add to the adjacency list and set edge status
@@ -248,7 +248,7 @@ void Dijkstras::ExpandReverse(GraphReader& graphreader,
                               const TimeInfo& time_info) {
   // Get the tile and the node info. Skip if tile is null (can happen
   // with regional data sets) or if no access at the node.
-  const GraphTile* tile = graphreader.GetGraphTile(node);
+  graph_tile_ptr tile = graphreader.GetGraphTile(node);
   if (tile == nullptr) {
     return;
   }
@@ -287,7 +287,7 @@ void Dijkstras::ExpandReverse(GraphReader& graphreader,
     }
 
     // Get end node tile, opposing edge Id, and opposing directed edge.
-    const GraphTile* t2 = tile;
+    graph_tile_ptr t2 = tile;
     auto opp_edge_id = graphreader.GetOpposingEdgeId(edgeid, t2);
     if (t2 == nullptr) {
       continue;
@@ -408,7 +408,7 @@ void Dijkstras::ExpandForwardMultiModal(GraphReader& graphreader,
                                         const TimeInfo& time_info) {
   // Get the tile and the node info. Skip if tile is null (can happen
   // with regional data sets) or if no access at the node.
-  const GraphTile* tile = graphreader.GetGraphTile(node);
+  auto tile = graphreader.GetGraphTile(node);
   if (tile == nullptr) {
     return;
   }
@@ -777,11 +777,11 @@ void Dijkstras::SetOriginLocations(GraphReader& graphreader,
       }
 
       // Get the directed edge
-      const GraphTile* tile = graphreader.GetGraphTile(edgeid);
+      graph_tile_ptr tile = graphreader.GetGraphTile(edgeid);
       const DirectedEdge* directededge = tile->directededge(edgeid);
 
       // Get the opposing directed edge, continue if we cannot get it
-      const GraphTile* opp_tile = nullptr;
+      graph_tile_ptr opp_tile = nullptr;
       GraphId opp_edge_id = graphreader.GetOpposingEdgeId(edgeid, opp_tile);
       if (!opp_edge_id.Is_Valid()) {
         continue;
@@ -844,11 +844,11 @@ void Dijkstras::SetDestinationLocations(
       }
 
       // Get the directed edge
-      const GraphTile* tile = graphreader.GetGraphTile(edgeid);
+      graph_tile_ptr tile = graphreader.GetGraphTile(edgeid);
       const DirectedEdge* directededge = tile->directededge(edgeid);
 
       // Get the opposing directed edge, continue if we cannot get it
-      const GraphTile* opp_tile = nullptr;
+      graph_tile_ptr opp_tile = nullptr;
       GraphId opp_edge_id = graphreader.GetOpposingEdgeId(edgeid, opp_tile);
       if (!opp_edge_id.Is_Valid()) {
         continue;
@@ -871,7 +871,7 @@ void Dijkstras::SetDestinationLocations(
       // edge (edgeid) is set.
       uint32_t idx = bdedgelabels_.size();
       int restriction_idx = -1;
-      bdedgelabels_.emplace_back(kInvalidLabel, edgeid, opp_edge_id, directededge, cost, mode_,
+      bdedgelabels_.emplace_back(kInvalidLabel, opp_edge_id, edgeid, opp_dir_edge, cost, mode_,
                                  Cost{}, path_dist, false, restriction_idx);
       adjacencylist_->add(idx);
       edgestatus_.Set(opp_edge_id, EdgeSet::kTemporary, idx, graphreader.GetGraphTile(opp_edge_id));
@@ -907,12 +907,12 @@ void Dijkstras::SetOriginLocationsMultiModal(
       }
 
       // Get the directed edge
-      const GraphTile* tile = graphreader.GetGraphTile(edgeid);
+      graph_tile_ptr tile = graphreader.GetGraphTile(edgeid);
       const DirectedEdge* directededge = tile->directededge(edgeid);
 
       // Get the tile at the end node. Skip if tile not found as we won't be
       // able to expand from this origin edge.
-      const GraphTile* endtile = graphreader.GetGraphTile(directededge->endnode());
+      graph_tile_ptr endtile = graphreader.GetGraphTile(directededge->endnode());
       if (endtile == nullptr) {
         continue;
       }
