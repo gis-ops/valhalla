@@ -479,12 +479,9 @@ BicycleCost::BicycleCost(const CostingOptions& costing_options)
     speedfactor_[s] = (kSecPerHour * 0.001f) / static_cast<float>(s);
 
     float base_pen = 0.0f;
-    if (s <= 40) {
-      base_pen = (static_cast<float>(s) / 40.0f);
-    } else if (s <= 65) {
-      base_pen = ((static_cast<float>(s) / 25.0f) - 0.6f);
-    } else {
-      base_pen = ((static_cast<float>(s) / 50.0) + 0.7f);
+    // Mod: raise the penalty > 35 KPH enormously
+    if (s >= 50) {
+      base_pen = (static_cast<float>(s) * 300.0f);
     }
     speedpenalty_[s] = (base_pen - 1.0f) * avoid_roads + 1.0f;
   }
@@ -685,7 +682,7 @@ Cost BicycleCost::TransitionCost(const baldr::DirectedEdge* edge,
   // Get the transition cost for country crossing, ferry, gate, toll booth,
   // destination only, alley, maneuver penalty
   uint32_t idx = pred.opp_local_idx();
-  Cost c = base_transition_cost(node, edge, pred, idx);
+  Cost c = base_transition_cost(node, edge, &pred, idx);
 
   // Accumulate cost and penalty
   float seconds = 0.0f;
